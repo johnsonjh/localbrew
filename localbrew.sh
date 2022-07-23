@@ -25,10 +25,10 @@ test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
 env PATH="$(command -p env getconf PATH)" env sudo -k > /dev/null 2>&1 || true
 $(command -v sudo || printf '%s\n' "true") -k > /dev/null 2>&1 || true
 
-SHNOPROFILE=" "; SHNORC=" "
+SHNOPROFILE="-i"
 "$(command -v sh || printf '%s\n' "sh")" --version 2> /dev/null |
-  grep -q "bash" && { SHNOPROFILE="--noprofile"; SHNORC="--norc"; }
-export SHNOPROFILE SHNORC
+  grep -q "bash" && SHNOPROFILE="--noprofile"
+export SHNOPROFILE
 
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 
@@ -49,7 +49,7 @@ command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
   HOMEBREW_NO_ENV_HINTS=1                  \
   "$(command -v sh || printf '%s\n' "sh")" \
-    "${SHNOPROFILE:-}" "${SHNORC:-}" -c '
+    "${SHNOPROFILE:?}" -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
@@ -88,5 +88,5 @@ command -p exec env -i       \
   PATH="${INSIDEPATH:?}"     \
   TERM="${TERM:?}"           \
   PS1=\"localbrew@\h:\W\ \u\$\" \
-  "${BREWSHELL:?}" "${SHNORC:-}" "${SHNOPROFILE:-}"
+  "${BREWSHELL:?}" "${SHNOPROFILE:-}"
 '
