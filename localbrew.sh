@@ -1,5 +1,5 @@
 #!/bin/sh
-# vim: set ts=2 sw=2 tw=0 expandtab colorcolumn=78 :
+# vim: set ts=2 sw=2 tw=0 expandtab colorcolumn=80 :
 # SPDX-License-Identifier: FSFAP
 
 ################################################################
@@ -19,7 +19,7 @@ test "$(whoami 2> /dev/null)" "!=" "root" ||
   { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
 
 # Drop sudo credential caching before we start, just in case.
-env PATH="$(command -p env getconf PATH)" sudo -k > /dev/null 2>&1 || true
+env PATH="$(command -p env getconf PATH)" env sudo -k > /dev/null 2>&1 || true
 $(command -v sudo || printf '%s\n' "true") -k > /dev/null 2>&1 || true
 
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
