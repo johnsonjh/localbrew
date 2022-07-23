@@ -15,6 +15,13 @@
 
 set -eu
 
+test "$(whoami 2> /dev/null)" "!=" "root" ||
+  { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
+
+# Drop sudo credential caching before we start, just in case.
+env PATH="$(command -p env getconf PATH)" sudo -k > /dev/null 2>&1 || true
+$(command -v sudo || printf '%s\n' "true") -k > /dev/null 2>&1 || true
+
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 
 test -d "${HOME:?}/.localbrew/.git" ||
@@ -33,7 +40,7 @@ command -p env -i            \
   TERM="${TERM:?}"           \
   BREWSHELL="${BREWSHELL:?}" \
   HOMEBREW_NO_ENV_HINTS=1    \
-  "$(command -v sh)" -c '
+  "$(command -v sh || printf '%s\n' "sh")" -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
@@ -41,9 +48,10 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
   grep -E "(/sw|/usr/local|/usr/opt|/opt)" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-	printf "\r%s\r" "* Updating brew ..."
+printf "\r%s\r" "[localbrew] Updating Homebrew ..."
 "${HOME:?}/.localbrew/bin/brew" update --force --quiet
 "${HOME:?}/.localbrew/bin/brew" install bash 2> /dev/null
+printf "\r%s\r" "                                 "
 
 chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
