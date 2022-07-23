@@ -30,7 +30,10 @@ SHNOPROFILE="-i"
   grep -q "bash" && SHNOPROFILE="--noprofile"
 export SHNOPROFILE
 
+HOMEBREW_DISPLAY_INSTALL_TIMES=1; export HOMEBREW_DISPLAY_INSTALL_TIMES
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
+HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
+HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
