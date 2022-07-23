@@ -87,7 +87,7 @@ eval command -p exec env -i  \
   HOME="${HOME:?}"           \
   PATH="${INSIDEPATH:?}"     \
   TERM="${TERM:?}"           \
-  PS1="[localbrew] \s-\v\$ " \
+  PS1="[localbrew] \\s-\\v\\$ " \
   "${BREWSHELL:?}"           \
     "${SHNORC:-}" "${SHNOPROFILE:-}"
 '
