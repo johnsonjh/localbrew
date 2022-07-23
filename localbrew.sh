@@ -15,32 +15,41 @@
 
 set -eu
 
-test "$(whoami 2> /dev/null)" "!=" "root" ||
+test -d "${HOME:?}" 2> /dev/null ||
+  { printf '%s\n' "Error: ${HOME:?} non-existent."; exit 1; }
+
+test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
   { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
 
 # Drop sudo credential caching before we start, just in case.
 env PATH="$(command -p env getconf PATH)" env sudo -k > /dev/null 2>&1 || true
 $(command -v sudo || printf '%s\n' "true") -k > /dev/null 2>&1 || true
 
+SHNOPROFILE=" "; SHNORC=" "
+"$(command -v sh || printf '%s\n' "sh")" --version 2> /dev/null |
+  grep -q "bash" && { SHNOPROFILE="--noprofile"; SHNORC="--norc"; }
+export SHNOPROFILE SHNORC
+
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 
-test -d "${HOME:?}/.localbrew/.git" ||
+test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
     "${HOME:?}/.localbrew"
 
-test -d "${HOME:?}/.localbrew/.git" ||
+test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
 
 BREWSHELL="${HOME:?}/.localbrew/bin/bash"
-test -x "${BREWSHELL:?}" || BREWSHELL="/bin/sh"; export BREWSHELL
+test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"export BREWSHELL
 
 # shellcheck disable=SC2016
-command -p env -i            \
-  HOME="${HOME:?}"           \
-  TERM="${TERM:?}"           \
-  BREWSHELL="${BREWSHELL:?}" \
-  HOMEBREW_NO_ENV_HINTS=1    \
-  "$(command -v sh || printf '%s\n' "sh")" -c '
+command -p env -i                          \
+  HOME="${HOME:?}"                         \
+  TERM="${TERM:?}"                         \
+  BREWSHELL="${BREWSHELL:?}"               \
+  HOMEBREW_NO_ENV_HINTS=1                  \
+  "$(command -v sh || printf '%s\n' "sh")" \
+  "${SHNOPROFILE:-}" "${SHNORC:-}" -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
