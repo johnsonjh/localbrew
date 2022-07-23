@@ -46,10 +46,11 @@ printf "%s\n" "${POSIXPATH:?}" |
     { printf "%s\n" "Error: Bad POSIXPATH: ${POSIXPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
-  "$("${HOME:?}/.localbrew/bin/brew" --prefix)"
+  "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
+    sed "s#${HOME:?}#\$HOME#g" || true
 
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
-  sed "s#${HOME:?}#$HOME#g"
+  sed "s#${HOME:?}#\$HOME#g" || true
 
 command -p exec env -i       \
   HOME="${HOME:?}"           \
