@@ -44,10 +44,11 @@ test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"export BREWSHELL
 
 # shellcheck disable=SC2016
 command -p env -i                          \
-  HOME="${HOME:?}"                         \
-  TERM="${TERM:?}"                         \
   BREWSHELL="${BREWSHELL:?}"               \
+  HOME="${HOME:?}"                         \
   HOMEBREW_NO_ENV_HINTS=1                  \
+  SHNOPROFILE="${SHNOPROFILE:?}"           \
+  TERM="${TERM:?}"                         \
   "$(command -v sh || printf '%s\n' "sh")" \
     ${SHNOPROFILE:?} -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
@@ -86,7 +87,7 @@ printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
 command -p exec env -i       \
   HOME="${HOME:?}"           \
   PATH="${INSIDEPATH:?}"     \
-  TERM="${TERM:?}"           \
   PS1=\"localbrew@\h:\W\ \u\$\" \
+  TERM="${TERM:?}"           \
   "${BREWSHELL:?}" ${SHNOPROFILE:?}
 '
