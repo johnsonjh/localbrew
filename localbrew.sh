@@ -63,9 +63,9 @@ BREWSPATH="${BREWMPATH:?}/sbin"
 POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
 
-printf "%s\n" "${POSIXPATH:?}" |
+printf "%s\n" "${INSIDEPATH:?}" |
   grep -E "(/sw|/usr/local|/usr/opt|/opt)" &&
-    { printf "%s\n" "Error: Bad POSIXPATH: ${POSIXPATH:?}"; exit 1; }
+    { printf "%s\n" "Error: Bad PATH: ${INSIDEPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
