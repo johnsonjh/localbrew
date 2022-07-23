@@ -35,8 +35,11 @@ chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
     > /dev/null 2>&1
 
-BREWPATH="$("${HOME:?}/.localbrew/bin/brew" --prefix)/bin"
+BREWMPATH="$("${HOME:?}/.localbrew/bin/brew" --prefix)"
+BREWBPATH="${BREWMPATH:?}/bin"
+BREWSPATH="${BREWMPATH:?}/sbin"
 POSIXPATH="$(command -p getconf PATH)"
+INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
 
 printf "%s\n" "${POSIXPATH:?}" |
   grep -E "(/sw|/usr/local|/usr/opt|/opt)" &&
@@ -45,13 +48,12 @@ printf "%s\n" "${POSIXPATH:?}" |
 printf "[localbrew] Using Homebrew prefix: %s\n" \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"
 
-printf "[localbrew] Using PATH: %s\n" \
-  "${BREWPATH:?}:${POSIXPATH:?}"
+printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}"
 
-command -p exec env -i                \
-  HOME="${HOME:?}"                    \
-  PATH="${BREWPATH:?}:${POSIXPATH:?}" \
-  TERM="${TERM:?}"                    \
-  PS1="[localbrew] \s-\v\$ "          \
+command -p exec env -i       \
+  HOME="${HOME:?}"           \
+  PATH="${INSIDEPATH:?}"     \
+  TERM="${TERM:?}"           \
+  PS1="[localbrew] \s-\v\$ " \
   ${BREWSHELL:?}
 '
