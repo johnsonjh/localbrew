@@ -1,4 +1,18 @@
 #!/bin/sh
+# vim: set ts=2 sw=2 tw=0 expandtab colorcolumn=78 :
+# SPDX-License-Identifier: FSFAP
+
+################################################################
+#                                                              #
+# Copyright (c) 2022 Jeffrey H. Johnson <trnsz@pobox.com>      #
+#                                                              #
+# Copying and distribution of this file, with or without       #
+# modification, are permitted in any medium without royalty    #
+# provided the copyright notice and this notice are preserved. #
+# This file is offered "AS-IS", without any warranty.          #
+#                                                              #
+################################################################
+
 set -eu
 
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
