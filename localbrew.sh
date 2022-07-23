@@ -87,6 +87,6 @@ command -p exec env -i       \
   HOME="${HOME:?}"           \
   PATH="${INSIDEPATH:?}"     \
   TERM="${TERM:?}"           \
-  PS1="localbrew@\h:\W \u\$" \
+  PS1="localbrew@\h:\W\ \u\$\" \
   "${BREWSHELL:?}" "${SHNORC:-}" "${SHNOPROFILE:-}"
 '
