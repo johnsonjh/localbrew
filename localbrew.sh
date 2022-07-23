@@ -83,11 +83,10 @@ printf "[localbrew] Using Homebrew prefix: %s\n" \
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
   sed "s#${HOME:?}#\$HOME#g" || true
 
-eval command -p exec env -i  \
+command -p exec env -i       \
   HOME="${HOME:?}"           \
   PATH="${INSIDEPATH:?}"     \
   TERM="${TERM:?}"           \
-  PS1="[localbrew] \\s-\\v\\$ " \
-  "${BREWSHELL:?}"           \
-    "${SHNORC:-}" "${SHNOPROFILE:-}"
+  PS1="localbrew@\h:\W \u\$" \
+  "${BREWSHELL:?}" "${SHNORC:-}" "${SHNOPROFILE:-}"
 '
