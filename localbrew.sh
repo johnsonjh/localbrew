@@ -49,7 +49,7 @@ command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
   HOMEBREW_NO_ENV_HINTS=1                  \
   "$(command -v sh || printf '%s\n' "sh")" \
-  "${SHNOPROFILE:-}" "${SHNORC:-}" -c '
+    "${SHNOPROFILE:-}" "${SHNORC:-}" -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
@@ -88,5 +88,6 @@ command -p exec env -i       \
   PATH="${INSIDEPATH:?}"     \
   TERM="${TERM:?}"           \
   PS1="[localbrew] \s-\v\$ " \
-  ${BREWSHELL:?}
+  "${BREWSHELL:?}"           \
+    "${SHNORC:-}" "${SHNOPROFILE:-}"
 '
