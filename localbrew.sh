@@ -45,7 +45,7 @@ eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
 printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
-  grep -E "(/sw|/usr/local|/usr/opt|/opt)" &&
+  grep -q -E "(/sw|/usr/local|/usr/opt|/opt)" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
 printf "\r%s\r" "[localbrew] Updating Homebrew ..."
@@ -64,7 +64,7 @@ POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
 
 printf "%s\n" "${INSIDEPATH:?}" |
-  grep -E "(/sw|/usr/local|/usr/opt|/opt)" &&
+  grep -q -E "(/sw|/usr/local|/usr/opt|/opt)" &&
     { printf "%s\n" "Error: Bad PATH: ${INSIDEPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
