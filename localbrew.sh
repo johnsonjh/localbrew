@@ -49,7 +49,7 @@ printf "[localbrew] Using Homebrew prefix: %s\n" \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"
 
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
-  sed "s/${HOME:?}/\$HOME/g"
+  sed "s#${HOME:?}#$HOME#g"
 
 command -p exec env -i       \
   HOME="${HOME:?}"           \
