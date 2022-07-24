@@ -45,7 +45,7 @@ test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
 
 BREWSHELL="${HOME:?}/.localbrew/bin/bash"
-test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"export BREWSHELL
+test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"; export BREWSHELL
 
 # shellcheck disable=SC2016
 command -p env -i                          \
