@@ -17,4 +17,12 @@
 <!--                                                                        -->
 # localbrew
 
+## Overview
+
 Creates a (mostly) isolated Homebrew environment for testing purposes.
+
+## Platforms
+
+`localbrew.sh` is regularly tested on:
+* GNU/Linux
+* Darwin 21.6 (macOS 12.5)
