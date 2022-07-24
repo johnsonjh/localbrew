@@ -52,6 +52,7 @@ command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
   HOME="${HOME:?}"                         \
   HOMEBREW_NO_ENV_HINTS=1                  \
+  PATH_BLACKLIST="${PATH_BLACKLIST:?}"     \
   SHNOPROFILE="${SHNOPROFILE:?}"           \
   SHNORC="${SHNORC:?}"                     \
   TERM="${TERM:?}"                         \
