@@ -35,6 +35,8 @@ HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
+PATH_BLACKLIST='(/opt|/sw|/usr/local|/usr/opt|/usr/pkg)"
+
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
     "${HOME:?}/.localbrew"
@@ -59,13 +61,13 @@ eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
 printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
-  grep -q -E "(/sw|/usr/local|/usr/opt|/opt)" &&
+  grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "\r%s\r" "[localbrew] Updating Homebrew ..."
+printf "\r%s"   "* Updating ..."
 "${HOME:?}/.localbrew/bin/brew" update --force --quiet
 "${HOME:?}/.localbrew/bin/brew" install bash 2> /dev/null
-printf "\r%s\r" "                                 "
+printf "\r%s\r" "              "
 
 chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
@@ -78,7 +80,7 @@ POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
 
 printf "%s\n" "${INSIDEPATH:?}" |
-  grep -q -E "(/sw|/usr/local|/usr/opt|/opt)" &&
+  grep -q -E "${PATH_BLACLIST:?}" &&
     { printf "%s\n" "Error: Bad PATH: ${INSIDEPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
