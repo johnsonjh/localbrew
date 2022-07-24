@@ -71,10 +71,10 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "\r%s"   "* Updating ..."
+printf "\r%s"   "* Updating ... "
 "${HOME:?}/.localbrew/bin/brew" update --force --quiet
 "${HOME:?}/.localbrew/bin/brew" install bash 2> /dev/null
-printf "\r%s\r" "              "
+printf "\r%s\r" "               "
 
 chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
