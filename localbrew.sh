@@ -87,7 +87,7 @@ POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
 
 printf "%s\n" "${INSIDEPATH:?}" |
-  grep -q -E "${PATH_BLACLIST:?}" &&
+  grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Bad PATH: ${INSIDEPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
