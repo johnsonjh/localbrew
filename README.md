@@ -25,4 +25,4 @@ Creates a (mostly) isolated Homebrew environment for testing purposes.
 
 `localbrew.sh` is regularly tested on:
 * GNU/Linux
-* Darwin 21.6 (macOS 12.5)
+* Darwin 21.6 (macOS 12.5) through 22.3 (macOS 13.2.1)
