@@ -19,7 +19,7 @@
 
 ## Overview
 
-Creates a (mostly) isolated Homebrew environment for testing purposes.
+Creates a (somewhat) isolated Homebrew environment for testing purposes.
 
 ## Platforms
 
