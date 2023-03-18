@@ -41,7 +41,7 @@ HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
-PATH_BLACKLIST='"(/opt|/sw|/usr/local|/usr/opt|/usr/pkg)"'
+PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
