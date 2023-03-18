@@ -4,7 +4,7 @@
 
 ###############################################################################
 #
-# Copyright (c) 2022 Jeffrey H. Johnson <trnsz@pobox.com>
+# Copyright (c) 2023 Jeffrey H. Johnson <trnsz@pobox.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted.
@@ -21,8 +21,8 @@
 
 set -eu
 
-test -d "${HOME:?}" 2> /dev/null ||
-  { printf '%s\n' "Error: ${HOME:?} non-existent."; exit 1; }
+test -d "${HOME:-}" 2> /dev/null ||
+  { printf '%s\n' "Error: ${HOME:-} non-existent."; exit 1; }
 
 test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
   { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
@@ -73,7 +73,7 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
 
 printf "\r%s"   "* Updating ... "
 "${HOME:?}/.localbrew/bin/brew" update --force --quiet
-"${HOME:?}/.localbrew/bin/brew" install bash 2> /dev/null
+"${HOME:?}/.localbrew/bin/brew" install --verbose bash 2> /dev/null
 printf "\r%s\r" "               "
 
 chmod -R go-w                                             \
