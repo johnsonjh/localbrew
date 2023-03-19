@@ -90,7 +90,7 @@ BREWBPATH="${BREWMPATH:?}/bin"
 BREWSPATH="${BREWMPATH:?}/sbin"
 POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
-export DISPLAY || true
+export HBDISPLAY || true
 
 printf "%s\n" "${INSIDEPATH:?}" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
@@ -108,7 +108,7 @@ command -p exec env -i          \
   PATH="${INSIDEPATH:?}"        \
   PS1="[localbrew] \h:\W \u\$ " \
   TERM="${TERM:?}"              \
-  ${DISPLAY:-}                  \
+  ${HBDISPLAY:-}                \
   "${BREWSHELL:?}"              \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
