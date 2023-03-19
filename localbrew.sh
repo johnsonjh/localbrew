@@ -53,10 +53,6 @@ test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
 BREWSHELL="${HOME:?}/.localbrew/bin/bash"
 test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"; export BREWSHELL
 
-HBDISPLAY="NODISPLAY=1"; export HBDISPLAY
-test -z "${DISPLAY:-}" ||
-  { HBDISPLAY="DISPLAY=\"${DISPLAY:?}\""; export HBDISPLAY; }
-
 # shellcheck disable=SC2016
 command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
@@ -66,7 +62,6 @@ command -p env -i                          \
   SHNOPROFILE="${SHNOPROFILE:?}"           \
   SHNORC="${SHNORC:?}"                     \
   TERM="${TERM:?}"                         \
-  ${HBDISPLAY:?}                           \
   "$(command -v sh || printf '%s\n' "sh")" \
     ${SHNOPROFILE:?} ${SHNORC:?} -c '
 eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
@@ -90,7 +85,6 @@ BREWBPATH="${BREWMPATH:?}/bin"
 BREWSPATH="${BREWMPATH:?}/sbin"
 POSIXPATH="$(command -p getconf PATH)"
 INSIDEPATH="${BREWBPATH:?}:${BREWSPATH:?}:${POSIXPATH:?}"
-export HBDISPLAY || true
 
 printf "%s\n" "${INSIDEPATH:?}" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
@@ -108,7 +102,6 @@ command -p exec env -i          \
   PATH="${INSIDEPATH:?}"        \
   PS1="[localbrew] \h:\W \u\$ " \
   TERM="${TERM:?}"              \
-  ${HBDISPLAY:-}                \
   "${BREWSHELL:?}"              \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
