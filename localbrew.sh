@@ -77,12 +77,16 @@ test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
 test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No \"${LOCALBREW_DIR:?}\" repository!"; exit 1; }
 
-BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"
-test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"; export BREWSHELL
+BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"; BREWBASH="${BREWSHELL:?}"
+test -x "${BREWSHELL:?}" 2> /dev/null ||
+  { BREWSHELL="$(command -v bash 2> /dev/null)" ||
+      BREWSHELL="/bin/sh"; export BREWSHELL; }
+printf '%s\n' "[localbrew] Shell is \"${BREWSHELL:?}\" ..."
 
 # shellcheck disable=SC2016
 command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
+  BREWBASH="${BREWBASH:?}"                 \
   HOME="${HOME:?}"                         \
   HOMEBREW_NO_ENV_HINTS=1                  \
   HOMEBREW_NO_ANALYTICS=1                  \
@@ -104,12 +108,13 @@ printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
   "${LOCALBREW_DIR:?}/bin/brew" update
 
-printf "%s\n"   "[localbrew] brew install bash ... "
-env HOMEBREW_NO_AUTO_UPDATE=1     \
-    HOMEBREW_NO_INSTALL_CLEANUP=1 \
-    HOMEBREW_NO_INSTALL_UPGRADE=1 \
-    HOMEBREW_DEVELOPER=1          \
-  "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"
+test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
+  { printf "%s\n"   "[localbrew] brew install bash ... ";
+    env HOMEBREW_NO_AUTO_UPDATE=1     \
+        HOMEBREW_NO_INSTALL_CLEANUP=1 \
+        HOMEBREW_NO_INSTALL_UPGRADE=1 \
+        HOMEBREW_DEVELOPER=1          \
+      "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"; }
 
 chmod -R go-w                                             \
   "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"/share/zsh \
