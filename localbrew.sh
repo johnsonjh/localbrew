@@ -48,13 +48,18 @@ test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
     "${HOME:?}/.localbrew"
 
-# Always default optimize for -O2 on oldest CPU when building source
+# Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
 sed -i -e 's/"Os"/"O2"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb"
-sed -i -e 's/self["HOMEBREW_OPTFLAGS"] = determine_optflags/self["HOMEBREW_OPTFLAGS"] = "-march=#{Hardware.oldest_cpu}"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb"
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" &&
+    printf '%s\n' \
+      "[localbrew] PATCH: \"Os\" -> \"O2\""
+sed -i -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" &&
+    printf '%s\n' \
+      "[localbrew] PATCH: \"determine_optflags\" -> \"#{Hardware.oldest_cpu}\""
 ( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
-    git commit -a -m localbrew --author=localbrew -n --no-gpg-sign )
+    git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
+      -n --no-gpg-sign )
 
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
