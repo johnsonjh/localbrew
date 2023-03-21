@@ -104,12 +104,12 @@ printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
   "${LOCALBREW_DIR:?}/bin/brew" update
 
-# printf "%s\n"   "[localbrew] brew install bash ... "
-# env HOMEBREW_NO_AUTO_UPDATE=1     \
-#     HOMEBREW_NO_INSTALL_CLEANUP=1 \
-#     HOMEBREW_NO_INSTALL_UPGRADE=1 \
-#     HOMEBREW_DEVELOPER=1          \
-#   "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"
+printf "%s\n"   "[localbrew] brew install bash ... "
+env HOMEBREW_NO_AUTO_UPDATE=1     \
+    HOMEBREW_NO_INSTALL_CLEANUP=1 \
+    HOMEBREW_NO_INSTALL_UPGRADE=1 \
+    HOMEBREW_DEVELOPER=1          \
+  "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"
 
 chmod -R go-w                                             \
   "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"/share/zsh \
@@ -137,6 +137,8 @@ command -p exec env -i          \
   PATH="${INSIDEPATH:?}"        \
   PS1="[localbrew] \h:\W \u\$ " \
   TERM="${TERM:?}"              \
+  HOMEBREW_DEVELOPER=1          \
+  HOMEBREW_NO_AUTO_UPDATE=1     \
   "${BREWSHELL:?}"              \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
