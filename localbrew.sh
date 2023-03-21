@@ -33,7 +33,7 @@ test -z "${1:-}" 2> /dev/null &&
 test -n "${1:-}" 2> /dev/null &&
   { LOCALBREW_DIR="${1:-}"; export LOCALBREW_DIR; }
 
-printf '%s\n' "[localbrew] Localbrew directory: \"${LOCALBREW_DIR:?}\""
+printf '%s\n' "[localbrew] Localbrew directory: ${LOCALBREW_DIR:?}"
 
 patch_brew () {
 sed -i '' -e \
@@ -85,7 +85,7 @@ BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"; BREWBASH="${BREWSHELL:?}"
 test -x "${BREWSHELL:?}" 2> /dev/null ||
   { BREWSHELL="$(command -v bash 2> /dev/null)" ||
       BREWSHELL="/bin/sh"; export BREWSHELL; }
-printf '%s\n' "[localbrew] Using shell: \"${BREWSHELL:?}\""
+printf '%s\n' "[localbrew] Using shell ${BREWSHELL:?}"
 
 # shellcheck disable=SC2016
 command -p env -i                          \
@@ -108,12 +108,12 @@ printf "%s\n" "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "%s\n"   "[localbrew] Updating Homebrew ... "
+printf "%s\n"   "[localbrew] Updating Homebrew"
 env HOMEBREW_DEVELOPER=1 \
   "${LOCALBREW_DIR:?}/bin/brew" update
 
 test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
-  { printf "%s\n"   "[localbrew] Installing Bash ... ";
+  { printf "%s\n"   "[localbrew] Installing Bash";
     env HOMEBREW_NO_AUTO_UPDATE=1     \
         HOMEBREW_NO_INSTALL_CLEANUP=1 \
         HOMEBREW_NO_INSTALL_UPGRADE=1 \
