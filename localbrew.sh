@@ -40,6 +40,7 @@ HOMEBREW_DISPLAY_INSTALL_TIMES=1; export HOMEBREW_DISPLAY_INSTALL_TIMES
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
+HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
@@ -58,6 +59,7 @@ command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
   HOME="${HOME:?}"                         \
   HOMEBREW_NO_ENV_HINTS=1                  \
+  HOMEBREW_NO_ANALYTICS=1                  \
   PATH_BLACKLIST="${PATH_BLACKLIST:?}"     \
   SHNOPROFILE="${SHNOPROFILE:?}"           \
   SHNORC="${SHNORC:?}"                     \
