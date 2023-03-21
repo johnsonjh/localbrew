@@ -37,10 +37,11 @@ SHNOPROFILE="-i"; SHNORC="-i"
 export SHNOPROFILE SHNORC
 
 HOMEBREW_DISPLAY_INSTALL_TIMES=1; export HOMEBREW_DISPLAY_INSTALL_TIMES
+HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
+HOMEBREW_NO_INSTALL_CLEANUP=1; export HOMEBREW_NO_INSTALL_CLEANUP
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
-HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
@@ -87,8 +88,8 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
 printf "\r%s"   "* Updating ... "
-"${HOME:?}/.localbrew/bin/brew" update --force --quiet
-"${HOME:?}/.localbrew/bin/brew" install --verbose bash 2> /dev/null
+"${HOME:?}/.localbrew/bin/brew" update --merge --quiet
+"${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash" 2> /dev/null
 printf "\r%s\r" "               "
 
 chmod -R go-w                                             \
