@@ -21,22 +21,29 @@
 
 set -eu
 
+test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
+  { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
+
 test -d "${HOME:-}" 2> /dev/null ||
   { printf '%s\n' "Error: ${HOME:-} non-existent."; exit 1; }
 
-test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
-  { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
+test -z "${1:-}" 2> /dev/null &&
+  { LOCALBREW_DIR="${HOME:?}/.localbrew"; export LOCALBREW_DIR; }
+
+printf '%s\n' "[localbrew] Using \"${LOCALBREW_DIR:?}\" ..."
 
 # Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
 patch_brew () {
 sed -i -e 's/"Os"/"O2"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
+  "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
     printf '%s\n' \
       "[localbrew] PATCH: Use \"O2\" ..." || true
+
 sed -i -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
+  "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
     printf '%s\n' \
       "[localbrew] PATCH: Use \"#{Hardware.oldest_cpu}\" ..." || true
+
 ( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
     git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
       -n --no-gpg-sign || true ) || true
@@ -63,15 +70,15 @@ HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
-printf '%s\n' "[localbrew] Using \"\$HOME/.localbrew\" ..."
-test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
+test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
-    "${HOME:?}/.localbrew" && patch_brew
+    "${LOCALBREW_DIR:?}" && \
+      patch_brew
 
-test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
-  { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
+test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
+  { printf '%s\n' "Error: No \"${LOCALBREW_DIR:?}\" repository!"; exit 1; }
 
-BREWSHELL="${HOME:?}/.localbrew/bin/bash"
+BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"
 test -x "${BREWSHELL:?}" 2> /dev/null || BREWSHELL="/bin/sh"; export BREWSHELL
 
 # shellcheck disable=SC2016
@@ -84,31 +91,32 @@ command -p env -i                          \
   SHNOPROFILE="${SHNOPROFILE:?}"           \
   SHNORC="${SHNORC:?}"                     \
   TERM="${TERM:?}"                         \
+  LOCALBREW_DIR="${LOCALBREW_DIR:?}"       \
   "$(command -v sh || printf '%s\n' "sh")" \
     ${SHNOPROFILE:?} ${SHNORC:?} -c '
-eval "$("${HOME:?}/.localbrew/bin/brew" shellenv)" ||
+eval "$("${LOCALBREW_DIR:?}/bin/brew" shellenv)" ||
   { printf "%s\n" "Error: Failed to setup brew environment!"; exit 1; }
 
-printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
+printf "%s\n" "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
 printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update
+  "${LOCALBREW_DIR:?}/bin/brew" update
 
 # printf "%s\n"   "[localbrew] brew install bash ... "
 # env HOMEBREW_NO_AUTO_UPDATE=1     \
 #     HOMEBREW_NO_INSTALL_CLEANUP=1 \
 #     HOMEBREW_NO_INSTALL_UPGRADE=1 \
 #     HOMEBREW_DEVELOPER=1          \
-#   "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash"
+#   "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"
 
 chmod -R go-w                                             \
-  "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
+  "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"/share/zsh \
     > /dev/null 2>&1
 
-BREWMPATH="$("${HOME:?}/.localbrew/bin/brew" --prefix)"
+BREWMPATH="$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"
 BREWBPATH="${BREWMPATH:?}/bin"
 BREWSPATH="${BREWMPATH:?}/sbin"
 POSIXPATH="$(command -p getconf PATH)"
@@ -119,7 +127,7 @@ printf "%s\n" "${INSIDEPATH:?}" |
     { printf "%s\n" "Error: Bad PATH: ${INSIDEPATH:?}"; exit 1; }
 
 printf "[localbrew] Using Homebrew prefix: %s\n" \
-  "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
+  "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
     sed "s#${HOME:?}#\$HOME#g" || true
 
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
