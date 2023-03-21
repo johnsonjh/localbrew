@@ -43,9 +43,10 @@ sed -i '' -e 's/"Os"/"O2"/' \
 sed -i '' -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
   "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
-    git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
-      -n --no-gpg-sign || true ) || true
+(( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
+     git commit -a -m "localbrew" --author="localbrew <localbrew@localbrew>" \
+       -n --no-gpg-sign 2>&1 || true) |
+         awk '{ print "[localbrew] "$0 }') || true
 }
 
 # Drop sudo credential caching before we start, just in case.
@@ -69,10 +70,10 @@ HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
-test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
-  git clone --depth=1 "https://github.com/Homebrew/brew" \
-    "${LOCALBREW_DIR:?}" && \
-      patch_brew
+(( test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
+    git clone --depth=1 "https://github.com/Homebrew/brew" \
+      "${LOCALBREW_DIR:?}" 2>&1 && \
+        patch_brew 2>&1; ) | awk '{ print "[localbrew] "$0 }'; )
 
 test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No \"${LOCALBREW_DIR:?}\" repository!"; exit 1; }
