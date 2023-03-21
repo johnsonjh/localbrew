@@ -51,6 +51,8 @@ SHNOPROFILE="-i"; SHNORC="-i"
   grep -q "bash" && { SHNOPROFILE="--noprofile"; SHNORC="--norc"; }
 export SHNOPROFILE SHNORC
 
+HOMEBREW_NO_AUTO_UPDATE=1; export HOMEBREW_NO_AUTO_UPDATE
+HOMEBREW_NO_BOOTSNAP=1; export HOMEBREW_NO_BOOTSNAP
 HOMEBREW_DISPLAY_INSTALL_TIMES=1; export HOMEBREW_DISPLAY_INSTALL_TIMES
 HOMEBREW_NO_ANALYTICS=1; export HOMEBREW_NO_ANALYTICS
 HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
@@ -90,9 +92,14 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
 printf "\r%s"   "* Updating ... "
-env HOMEBREW_DEVELOPER=1 "${HOME:?}/.localbrew/bin/brew" update --merge --quiet
-env HOMEBREW_DEVELOPER=1 "${HOME:?}/.localbrew/bin/brew" update --quiet
-"${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash" 2> /dev/null
+env HOMEBREW_DEVELOPER=1 \
+  "${HOME:?}/.localbrew/bin/brew" update --quiet
+env HOMEBREW_DEVELOPER=1 \
+  "${HOME:?}/.localbrew/bin/brew" update --merge --quiet 2> /dev/null
+env HOMEBREW_NO_AUTO_UPDATE=1     \
+    HOMEBREW_NO_INSTALL_CLEANUP=1 \
+    HOMEBREW_DEVELOPER=1          \
+  "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash"
 printf "\r%s\r" "               "
 
 chmod -R go-w                                             \
