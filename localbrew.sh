@@ -107,7 +107,8 @@ printf "%s\n" "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
 
 printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${LOCALBREW_DIR:?}/bin/brew" update
+  "${LOCALBREW_DIR:?}/bin/brew" update 2>&1 |
+     awk "{ print \"[localbrew] \"$0 }";
 
 test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
   { printf "%s\n"   "[localbrew] brew install bash ... ";
@@ -115,7 +116,8 @@ test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
         HOMEBREW_NO_INSTALL_CLEANUP=1 \
         HOMEBREW_NO_INSTALL_UPGRADE=1 \
         HOMEBREW_DEVELOPER=1          \
-      "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"; }
+      "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash" 2>&1 |
+         awk "{ print \"[localbrew] \"$0 }"; }
 
 chmod -R go-w                                             \
   "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"/share/zsh \
