@@ -32,11 +32,11 @@ patch_brew () {
 sed -i -e 's/"Os"/"O2"/' \
   "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
     printf '%s\n' \
-      "[localbrew] PATCH: Use \"O2\"" || true
+      "[localbrew] PATCH: Use \"O2\" ..." || true
 sed -i -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
   "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
     printf '%s\n' \
-      "[localbrew] PATCH: Use \"#{Hardware.oldest_cpu}\"" || true
+      "[localbrew] PATCH: Use \"#{Hardware.oldest_cpu}\" ..." || true
 ( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
     git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
       -n --no-gpg-sign || true ) || true
@@ -91,16 +91,20 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "\r%s"   "* Updating ... "
+printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update --quiet
+  "${HOME:?}/.localbrew/bin/brew" update --merge 2> /dev/null ||
+    env HOMEBREW_DEVELOPER=1 \
+      "${HOME:?}/.localbrew/bin/brew" update 2> /dev/null
+
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update --merge --quiet 2> /dev/null
+  "${HOME:?}/.localbrew/bin/brew" update --merge 2> /dev/null
+
+printf "%s\n"   "[localbrew] brew install bash ... "
 env HOMEBREW_NO_AUTO_UPDATE=1     \
     HOMEBREW_NO_INSTALL_CLEANUP=1 \
     HOMEBREW_DEVELOPER=1          \
   "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash"
-printf "\r%s\r" "               "
 
 chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
