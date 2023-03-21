@@ -97,12 +97,12 @@ printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
   "${HOME:?}/.localbrew/bin/brew" update
 
-printf "%s\n"   "[localbrew] brew install bash ... "
-env HOMEBREW_NO_AUTO_UPDATE=1     \
-    HOMEBREW_NO_INSTALL_CLEANUP=1 \
-    HOMEBREW_NO_INSTALL_UPGRADE=1 \
-    HOMEBREW_DEVELOPER=1          \
-  "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash"
+# printf "%s\n"   "[localbrew] brew install bash ... "
+# env HOMEBREW_NO_AUTO_UPDATE=1     \
+#     HOMEBREW_NO_INSTALL_CLEANUP=1 \
+#     HOMEBREW_NO_INSTALL_UPGRADE=1 \
+#     HOMEBREW_DEVELOPER=1          \
+#   "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash"
 
 chmod -R go-w                                             \
   "$("${HOME:?}/.localbrew/bin/brew" --prefix)"/share/zsh \
