@@ -48,9 +48,11 @@ sed -i'' -e \
   's/Settings.read("donationmessage") != "true" && !args.quiet?/false/' \
     "${LOCALBREW_DIR:?}/Library/Homebrew/cmd/update-report.rb" 2> /dev/null
 
-( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
-    git commit -a -m "localbrew" --author="localbrew <localbrew@localbrew>" \
-      -n --no-gpg-sign || true; )
+(
+ { cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" && git commit -a -m \
+   "localbrew" --author="localbrew <localbrew@localbrew>" -n --no-gpg-sign;
+ } || true;
+)
 }
 
 # Drop sudo credential caching before we start, just in case.
