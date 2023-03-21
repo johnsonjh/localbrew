@@ -80,7 +80,7 @@ BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"; BREWBASH="${BREWSHELL:?}"
 test -x "${BREWSHELL:?}" 2> /dev/null ||
   { BREWSHELL="$(command -v bash 2> /dev/null)" ||
       BREWSHELL="/bin/sh"; export BREWSHELL; }
-printf '%s\n' "[localbrew] Shell is \"${BREWSHELL:?}\" ..."
+printf '%s\n' "[localbrew] Found shell \"${BREWSHELL:?}\" ..."
 
 # shellcheck disable=SC2016
 command -p env -i                          \
@@ -103,12 +103,12 @@ printf "%s\n" "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "%s\n"   "[localbrew] brew update ... "
+printf "%s\n"   "[localbrew] Updating Homebrew ... "
 env HOMEBREW_DEVELOPER=1 \
   "${LOCALBREW_DIR:?}/bin/brew" update
 
 test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
-  { printf "%s\n"   "[localbrew] brew install bash ... ";
+  { printf "%s\n"   "[localbrew] Installing Bash ... ";
     env HOMEBREW_NO_AUTO_UPDATE=1     \
         HOMEBREW_NO_INSTALL_CLEANUP=1 \
         HOMEBREW_NO_INSTALL_UPGRADE=1 \
