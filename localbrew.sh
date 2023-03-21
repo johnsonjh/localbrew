@@ -37,13 +37,13 @@ printf '%s\n' "[localbrew] Using \"${LOCALBREW_DIR:?}\" ..."
 
 # Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
 patch_brew () {
-sed -i"" -e 's/"Os"/"O2"/' \
+sed -i '' -e 's/"Os"/"O2"/' \
   "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-sed -i"" -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
+sed -i '' -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
   "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
+( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
     git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
       -n --no-gpg-sign || true ) || true
 }
