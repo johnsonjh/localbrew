@@ -19,7 +19,7 @@
 
 ## Overview
 
-Creates a (somewhat) isolated Homebrew environment for testing purposes.
+Create portable *`virtualenv`*-like Homebrew environments.
 
 ## Platforms
 
