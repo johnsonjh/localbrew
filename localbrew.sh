@@ -91,14 +91,15 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "%s\n"   "[localbrew] brew update ... "
+printf "%s\n"   "[localbrew] brew update [--merge] ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update --merge 2> /dev/null ||
+  "${HOME:?}/.localbrew/bin/brew" update --merge ||
     env HOMEBREW_DEVELOPER=1 \
-      "${HOME:?}/.localbrew/bin/brew" update 2> /dev/null
+      "${HOME:?}/.localbrew/bin/brew" update
 
+printf "%s\n"   "[localbrew] brew update --merge ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update --merge 2> /dev/null
+  "${HOME:?}/.localbrew/bin/brew" update --merge
 
 printf "%s\n"   "[localbrew] brew install bash ... "
 env HOMEBREW_NO_AUTO_UPDATE=1     \
