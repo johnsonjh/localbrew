@@ -27,6 +27,21 @@ test -d "${HOME:-}" 2> /dev/null ||
 test "$(whoami 2> /dev/null)" "!=" "root" 2> /dev/null ||
   { printf '%s\n' "Error: Running as root is not allowed!"; exit 1; }
 
+# Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
+patch_brew () {
+sed -i -e 's/"Os"/"O2"/' \
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
+    printf '%s\n' \
+      "[localbrew] PATCH: Use \"O2\"" || true
+sed -i -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null &&
+    printf '%s\n' \
+      "[localbrew] PATCH: Use \"#{Hardware.oldest_cpu}\"" || true
+( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
+    git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
+      -n --no-gpg-sign || true ) || true
+}
+
 # Drop sudo credential caching before we start, just in case.
 env PATH="$(command -p env getconf PATH)" env sudo -k > /dev/null 2>&1 || true
 $(command -v sudo || printf '%s\n' "true") -k > /dev/null 2>&1 || true
@@ -47,20 +62,7 @@ PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
-    "${HOME:?}/.localbrew"
-
-# Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
-sed -i -e 's/"Os"/"O2"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" &&
-    printf '%s\n' \
-      "[localbrew] PATCH: \"Os\" -> \"O2\""
-sed -i -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
-  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb" &&
-    printf '%s\n' \
-      "[localbrew] PATCH: \"determine_optflags\" -> \"#{Hardware.oldest_cpu}\""
-( cd "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV" &&
-    git commit -a -m "localbrew patch" --author="localbrew.sh <local@brew>" \
-      -n --no-gpg-sign )
+    "${HOME:?}/.localbrew" && patch_brew
 
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
@@ -88,7 +90,8 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
 printf "\r%s"   "* Updating ... "
-"${HOME:?}/.localbrew/bin/brew" update --merge --quiet
+env HOMEBREW_DEVELOPER=1 "${HOME:?}/.localbrew/bin/brew" update --merge --quiet
+env HOMEBREW_DEVELOPER=1 "${HOME:?}/.localbrew/bin/brew" update --quiet
 "${HOME:?}/.localbrew/bin/brew" install -v --no-quarantine "bash" 2> /dev/null
 printf "\r%s\r" "               "
 
