@@ -36,15 +36,15 @@ test -n "${1:-}" 2> /dev/null &&
 printf '%s\n' "[localbrew] Localbrew directory: ${LOCALBREW_DIR:?}"
 
 patch_brew () {
-sed -i '' -e \
+sed -i'' -e \
   's/"Os"/"O2"/' \
     "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-sed -i '' -e \
+sed -i'' -e \
   's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
     "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-sed -i '' -e \
+sed -i'' -e \
   's/Settings.read("donationmessage") != "true" && !args.quiet?/false/' \
     "${LOCALBREW_DIR:?}/Library/Homebrew/cmd/update-report.rb" 2> /dev/null
 
