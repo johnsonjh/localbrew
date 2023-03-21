@@ -30,6 +30,9 @@ test -d "${HOME:-}" 2> /dev/null ||
 test -z "${1:-}" 2> /dev/null &&
   { LOCALBREW_DIR="${HOME:?}/.localbrew"; export LOCALBREW_DIR; }
 
+test -n "${1:-}" 2> /dev/null &&
+  { LOCALBREW_DIR="${1:-}"; export LOCALBREW_DIR; }
+
 printf '%s\n' "[localbrew] Using \"${LOCALBREW_DIR:?}\" ..."
 
 # Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
