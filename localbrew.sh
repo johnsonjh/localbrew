@@ -43,10 +43,9 @@ sed -i '' -e 's/"Os"/"O2"/' \
 sed -i '' -e 's/= determine_optflags/= "-march=#{Hardware.oldest_cpu}"/' \
   "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb" 2> /dev/null
 
-(( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
-     git commit -a -m "localbrew" --author="localbrew <localbrew@localbrew>" \
-       -n --no-gpg-sign 2>&1 || true) |
-         awk '{ print "[localbrew] "$0 }') || true
+( cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" &&
+    git commit -a -m "localbrew" --author="localbrew <localbrew@localbrew>" \
+      -n --no-gpg-sign || true; )
 }
 
 # Drop sudo credential caching before we start, just in case.
@@ -70,10 +69,9 @@ HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
-(( test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
+( test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
     git clone --depth=1 "https://github.com/Homebrew/brew" \
-      "${LOCALBREW_DIR:?}" 2>&1 && \
-        patch_brew 2>&1; ) | awk '{ print "[localbrew] "$0 }'; )
+      "${LOCALBREW_DIR:?}" && patch_brew 2>&1; )
 
 test -d "${LOCALBREW_DIR:?}/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No \"${LOCALBREW_DIR:?}\" repository!"; exit 1; }
@@ -107,8 +105,7 @@ printf "%s\n" "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)" |
 
 printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${LOCALBREW_DIR:?}/bin/brew" update 2>&1 |
-     awk "{ print \"[localbrew] \"$0 }";
+  "${LOCALBREW_DIR:?}/bin/brew" update
 
 test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
   { printf "%s\n"   "[localbrew] brew install bash ... ";
@@ -116,8 +113,7 @@ test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
         HOMEBREW_NO_INSTALL_CLEANUP=1 \
         HOMEBREW_NO_INSTALL_UPGRADE=1 \
         HOMEBREW_DEVELOPER=1          \
-      "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash" 2>&1 |
-         awk "{ print \"[localbrew] \"$0 }"; }
+      "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"; }
 
 chmod -R go-w                                             \
   "$("${LOCALBREW_DIR:?}/bin/brew" --prefix)"/share/zsh \
