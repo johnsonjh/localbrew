@@ -33,7 +33,7 @@ test -z "${1:-}" 2> /dev/null &&
 test -n "${1:-}" 2> /dev/null &&
   { LOCALBREW_DIR="${1:-}"; export LOCALBREW_DIR; }
 
-printf '%s\n' "[localbrew] Using \"${LOCALBREW_DIR:?}\" ..."
+printf '%s\n' "[localbrew] Localbrew directory: \"${LOCALBREW_DIR:?}\""
 
 # Change default optimization to -O2 #{Hardware.oldest_cpu} for source builds.
 patch_brew () {
@@ -80,7 +80,7 @@ BREWSHELL="${LOCALBREW_DIR:?}/bin/bash"; BREWBASH="${BREWSHELL:?}"
 test -x "${BREWSHELL:?}" 2> /dev/null ||
   { BREWSHELL="$(command -v bash 2> /dev/null)" ||
       BREWSHELL="/bin/sh"; export BREWSHELL; }
-printf '%s\n' "[localbrew] Found shell \"${BREWSHELL:?}\" ..."
+printf '%s\n' "[localbrew] Using shell: \"${BREWSHELL:?}\""
 
 # shellcheck disable=SC2016
 command -p env -i                          \
