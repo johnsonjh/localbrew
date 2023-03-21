@@ -62,6 +62,7 @@ HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
+printf '%s\n' "[localbrew] Using \"\$HOME/.localbrew\" ..."
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
     "${HOME:?}/.localbrew" && patch_brew
@@ -91,11 +92,9 @@ printf "%s\n" "$("${HOME:?}/.localbrew/bin/brew" --prefix)" |
   grep -q -E "${PATH_BLACKLIST:?}" &&
     { printf "%s\n" "Error: Unexpected Homebrew prefix!"; exit 1; }
 
-printf "%s\n"   "[localbrew] brew update [--merge] ... "
+printf "%s\n"   "[localbrew] brew update ... "
 env HOMEBREW_DEVELOPER=1 \
-  "${HOME:?}/.localbrew/bin/brew" update --merge ||
-    env HOMEBREW_DEVELOPER=1 \
-      "${HOME:?}/.localbrew/bin/brew" update
+  "${HOME:?}/.localbrew/bin/brew" update
 
 printf "%s\n"   "[localbrew] brew update --merge ... "
 env HOMEBREW_DEVELOPER=1 \
