@@ -48,6 +48,12 @@ test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   git clone --depth=1 "https://github.com/Homebrew/brew" \
     "${HOME:?}/.localbrew"
 
+# Always default optimize for -O2 on oldest CPU when building source
+sed -i 's/"Os"/"O2"/' \
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb"
+sed -i 's/self["HOMEBREW_OPTFLAGS"] = determine_optflags/self["HOMEBREW_OPTFLAGS"] = "-march=#{Hardware.oldest_cpu}" unless build.bottle?/' \
+  "${HOME:?}/.localbrew/Library/Homebrew/extend/ENV/super.rb"
+
 test -d "${HOME:?}/.localbrew/.git" 2> /dev/null ||
   { printf '%s\n' "Error: No ${HOME:?}/.localbrew repository!"; exit 1; }
 
