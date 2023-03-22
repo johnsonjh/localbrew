@@ -154,6 +154,19 @@ command -p exec env -i          \
   PATH="${INSIDEPATH:?}"        \
   PS1="[localbrew] \h:\W \u\$ " \
   TERM="${TERM:?}"              \
+  HOMEBREW_NO_ENV_HINTS=1       \
+  HOMEBREW_DEVELOPER=1          \
+  HOMEBREW_NO_AUTO_UPDATE=1     \
+  "${LOCALBREW_DIR:?}/bin/brew" \
+    analytics off               \
+    > /dev/null 2>&1
+
+command -p exec env -i          \
+  HOME="${HOME:?}"              \
+  PATH="${INSIDEPATH:?}"        \
+  PS1="[localbrew] \h:\W \u\$ " \
+  TERM="${TERM:?}"              \
+  HOMEBREW_NO_ENV_HINTS=1       \
   HOMEBREW_DEVELOPER=1          \
   HOMEBREW_NO_AUTO_UPDATE=1     \
   "${BREWSHELL:?}"              \
