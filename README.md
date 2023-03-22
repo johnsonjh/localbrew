@@ -19,7 +19,7 @@
 
 ## Overview
 
-Create portable *`virtualenv`*-like Homebrew environments.
+Creates portable *`virtualenv`*-like Homebrew environments.
 
 ## Platforms
 
