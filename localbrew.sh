@@ -80,6 +80,7 @@ HOMEBREW_NO_INSTALL_CLEANUP=1; export HOMEBREW_NO_INSTALL_CLEANUP
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
 HOMEBREW_NO_INSTALL_FROM_API=1; export HOMEBREW_NO_INSTALL_FROM_API
+HOMEBREW_LOCALBREW=1; export HOMEBREW_LOCALBREW
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
@@ -101,6 +102,7 @@ command -p env -i                          \
   BREWSHELL="${BREWSHELL:?}"               \
   BREWBASH="${BREWBASH:?}"                 \
   HOME="${HOME:?}"                         \
+  HOMEBREW_LOCALBREW=1                     \
   HOMEBREW_NO_ENV_HINTS=1                  \
   HOMEBREW_NO_ANALYTICS=1                  \
   HOMEBREW_NO_INSTALL_FROM_API=1           \
@@ -128,6 +130,7 @@ test "${BREWBASH:?}" "=" "${BREWSHELL:?}" ||
         HOMEBREW_NO_INSTALL_CLEANUP=1 \
         HOMEBREW_NO_INSTALL_UPGRADE=1 \
         HOMEBREW_DEVELOPER=1          \
+        HOMEBREW_LOCALBREW=1          \
       "${LOCALBREW_DIR:?}/bin/brew" install -v --no-quarantine "bash"; }
 
 chmod -R go-w                                             \
@@ -160,6 +163,7 @@ command -p env -i                \
   HOMEBREW_DEVELOPER=1           \
   HOMEBREW_NO_AUTO_UPDATE=1      \
   HOMEBREW_NO_INSTALL_FROM_API=1 \
+  HOMEBREW_LOCALBREW=1           \
   "${LOCALBREW_DIR:?}/bin/brew"  \
     analytics off                \
     > /dev/null 2>&1 || true
@@ -173,6 +177,7 @@ command -p exec env -i           \
   HOMEBREW_DEVELOPER=1           \
   HOMEBREW_NO_AUTO_UPDATE=1      \
   HOMEBREW_NO_INSTALL_FROM_API=1 \
+  HOMEBREW_LOCALBREW=1           \
   "${BREWSHELL:?}"               \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
