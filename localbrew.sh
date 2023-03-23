@@ -178,6 +178,8 @@ command -p exec env -i           \
   HOMEBREW_NO_AUTO_UPDATE=1      \
   HOMEBREW_NO_INSTALL_FROM_API=1 \
   HOMEBREW_LOCALBREW=1           \
+  HOMEBREW_VERBOSE=1             \
+  HOMEBREW_VERBOSE_USING_DOTS=1  \
   "${BREWSHELL:?}"               \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
