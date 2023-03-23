@@ -79,6 +79,7 @@ HOMEBREW_NO_ENV_HINTS=1; export HOMEBREW_NO_ENV_HINTS
 HOMEBREW_NO_INSTALL_CLEANUP=1; export HOMEBREW_NO_INSTALL_CLEANUP
 HOMEBREW_VERBOSE=1; export HOMEBREW_VERBOSE
 HOMEBREW_VERBOSE_USING_DOTS=1; export HOMEBREW_VERBOSE_USING_DOTS
+HOMEBREW_NO_INSTALL_FROM_API=1; export HOMEBREW_NO_INSTALL_FROM_API
 
 PATH_BLACKLIST='"(/opt/local|/sw|/usr/local|/usr/opt|/usr/pkg)"'
 
@@ -102,6 +103,7 @@ command -p env -i                          \
   HOME="${HOME:?}"                         \
   HOMEBREW_NO_ENV_HINTS=1                  \
   HOMEBREW_NO_ANALYTICS=1                  \
+  HOMEBREW_NO_INSTALL_FROM_API=1           \
   PATH_BLACKLIST="${PATH_BLACKLIST:?}"     \
   SHNOPROFILE="${SHNOPROFILE:?}"           \
   SHNORC="${SHNORC:?}"                     \
@@ -149,26 +151,28 @@ printf "[localbrew] Using Homebrew prefix: %s\n" \
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
   sed "s#${HOME:?}#\$HOME#g" || true
 
-command -p env -i               \
-  HOME="${HOME:?}"              \
-  PATH="${INSIDEPATH:?}"        \
-  PS1="[localbrew] \h:\W \u\$ " \
-  TERM="${TERM:?}"              \
-  HOMEBREW_NO_ENV_HINTS=1       \
-  HOMEBREW_DEVELOPER=1          \
-  HOMEBREW_NO_AUTO_UPDATE=1     \
-  "${LOCALBREW_DIR:?}/bin/brew" \
-    analytics off               \
+command -p env -i                \
+  HOME="${HOME:?}"               \
+  PATH="${INSIDEPATH:?}"         \
+  PS1="[localbrew] \h:\W \u\$ "  \
+  TERM="${TERM:?}"               \
+  HOMEBREW_NO_ENV_HINTS=1        \
+  HOMEBREW_DEVELOPER=1           \
+  HOMEBREW_NO_AUTO_UPDATE=1      \
+  HOMEBREW_NO_INSTALL_FROM_API=1 \
+  "${LOCALBREW_DIR:?}/bin/brew"  \
+    analytics off                \
     > /dev/null 2>&1 || true
 
-command -p exec env -i          \
-  HOME="${HOME:?}"              \
-  PATH="${INSIDEPATH:?}"        \
-  PS1="[localbrew] \h:\W \u\$ " \
-  TERM="${TERM:?}"              \
-  HOMEBREW_NO_ENV_HINTS=1       \
-  HOMEBREW_DEVELOPER=1          \
-  HOMEBREW_NO_AUTO_UPDATE=1     \
-  "${BREWSHELL:?}"              \
+command -p exec env -i           \
+  HOME="${HOME:?}"               \
+  PATH="${INSIDEPATH:?}"         \
+  PS1="[localbrew] \h:\W \u\$ "  \
+  TERM="${TERM:?}"               \
+  HOMEBREW_NO_ENV_HINTS=1        \
+  HOMEBREW_DEVELOPER=1           \
+  HOMEBREW_NO_AUTO_UPDATE=1      \
+  HOMEBREW_NO_INSTALL_FROM_API=1 \
+  "${BREWSHELL:?}"               \
     ${SHNOPROFILE:?} ${SHNORC:?}
 '
