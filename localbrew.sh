@@ -149,7 +149,7 @@ printf "[localbrew] Using Homebrew prefix: %s\n" \
 printf "[localbrew] Using PATH: %s\n" "${INSIDEPATH:?}" |
   sed "s#${HOME:?}#\$HOME#g" || true
 
-command -p exec env -i          \
+command -p env -i               \
   HOME="${HOME:?}"              \
   PATH="${INSIDEPATH:?}"        \
   PS1="[localbrew] \h:\W \u\$ " \
