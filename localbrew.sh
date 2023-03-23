@@ -159,7 +159,7 @@ command -p exec env -i          \
   HOMEBREW_NO_AUTO_UPDATE=1     \
   "${LOCALBREW_DIR:?}/bin/brew" \
     analytics off               \
-    > /dev/null 2>&1
+    > /dev/null 2>&1 || true
 
 command -p exec env -i          \
   HOME="${HOME:?}"              \
