@@ -25,4 +25,4 @@ Creates portable *`virtualenv`*-like Homebrew environments.
 
 `localbrew.sh` is regularly tested on:
 * GNU/Linux
-* Darwin 21.6 (macOS 12.5) through 22.3 (macOS 13.2.1)
+* Darwin 21.6 (macOS 10.13.6) through 22.3 (macOS 13.2.1)
