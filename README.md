@@ -15,14 +15,16 @@
 <!-- TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR       -->
 <!-- PERFORMANCE OF THIS SOFTWARE.                                          -->
 <!--                                                                        -->
-# localbrew
+
+# Localbrew
 
 ## Overview
 
-Creates portable *`virtualenv`*-like Homebrew environments.
+Creates portable _`virtualenv`_-like Homebrew environments.
 
 ## Platforms
 
 `localbrew.sh` is regularly tested on:
-* GNU/Linux
-* Darwin 21.6 (macOS 10.13.6) through 22.3 (macOS 13.2.1)
+
+- GNU/Linux
+- Darwin 21.6 (macOS 10.13.6) through 22.3 (macOS 13.2.1)
