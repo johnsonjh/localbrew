@@ -48,12 +48,6 @@ sed -i'' -e \
 rm -f "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV/super.rb-e" \
         > /dev/null 2>&1 || true
 
-sed -i'' -e \
-  's/Settings.read("donationmessage") != "true" && !args.quiet?/false/' \
-    "${LOCALBREW_DIR:?}/Library/Homebrew/cmd/update-report.rb" 2> /dev/null
-rm -f "${LOCALBREW_DIR:?}/Library/Homebrew/cmd/update-report.rb-e" \
-        > /dev/null 2>&1 || true
-
 (
  { cd "${LOCALBREW_DIR:?}/Library/Homebrew/extend/ENV" && git commit -a -m \
    "localbrew" --author="localbrew <localbrew@localbrew>" -n --no-gpg-sign;
