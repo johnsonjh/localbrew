@@ -1,7 +1,7 @@
 <!-- vim: set ft=markdown ts=4 sw=4 tw=0 expandtab colorcolumn=80 :         -->
 <!-- SPDX-License-Identifier: 0BSD                                          -->
 <!--                                                                        -->
-<!-- Copyright (c) 2022-2023 Jeffrey H. Johnson ❬trnsz@pobox.com❭           -->
+<!-- Copyright (c) 2022-2023 Jeffrey H. Johnson ❬johnsonjh.dev@gmail.com❭   -->
 <!--                                                                        -->
 <!-- Permission to use, copy, modify, and/or distribute this software for   -->
 <!-- any purpose with or without fee is hereby granted.                     -->
